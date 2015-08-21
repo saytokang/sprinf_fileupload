@@ -1,8 +1,15 @@
 package x.y.z;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,4 +60,21 @@ public class ImageUploadController {
 		model.addAttribute("imageFiles", saveFiles);
 		return "uploadsComplete";
 	}
+	
+	@RequestMapping(value = "/files/{fileName}", method = RequestMethod.GET)
+	public HttpEntity<byte[]> createPdf(
+	                 @PathVariable("fileName") String fileName) throws IOException {
+		
+		String path = ImageFile.UPLOAD_PATH +fileName + ".docx";
+	    byte[] bytes = Files.readAllBytes(Paths.get(path));
+
+	    String downloadFileName = "DW_" + fileName +".docx";
+	    HttpHeaders header = new HttpHeaders();
+	    header.setContentType(new MediaType("application", "docx"));
+	    header.set("Content-Disposition", "attachment; filename=" + downloadFileName.replace(" ", "_"));
+	    header.setContentLength(bytes.length);
+
+	    return new HttpEntity<byte[]>(bytes, header);
+	}
+	
 }
