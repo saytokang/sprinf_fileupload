@@ -1,11 +1,13 @@
 package x.y.z;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -66,8 +68,10 @@ public class ImageUploadController {
 	                 @PathVariable("fileName") String fileName) throws IOException {
 		
 		String path = ImageFile.UPLOAD_PATH +fileName + ".docx";
-	    byte[] bytes = Files.readAllBytes(Paths.get(path));
+//	    byte[] bytes = Files.readAllBytes(Paths.get(path)); // jdk1.7 이상 
+	    byte[] bytes = FileUtils.readFileToByteArray(new File(path)); // jdk1.6 이하 
 
+	    
 	    String downloadFileName = "DW_" + fileName +".docx";
 	    HttpHeaders header = new HttpHeaders();
 	    header.setContentType(new MediaType("application", "docx"));
