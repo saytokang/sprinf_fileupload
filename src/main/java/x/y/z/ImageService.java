@@ -1,13 +1,12 @@
 package x.y.z;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,11 +39,12 @@ public class ImageService {
 
 	private String saveToFile(MultipartFile file, String uuid) throws IOException {
 		String originalFileName = file.getOriginalFilename();
-		byte[] bytes = file.getBytes();
-		String saveFileName = new StringBuilder(uuid).append(".").append(FilenameUtils.getExtension(originalFileName)).toString();
-		String savePath = ImageFile.UPLOAD_PATH + saveFileName;
-		IOUtils.write(bytes, new FileOutputStream(savePath));
-		return saveFileName;
+		String newFileName = new StringBuilder(uuid).append(".").append(FilenameUtils.getExtension(originalFileName)).toString();
+		String saveFilePath = ImageFile.UPLOAD_PATH + newFileName;
+		file.transferTo(new File(saveFilePath));
+//		byte[] bytes = file.getBytes();
+//		IOUtils.write(bytes, new FileOutputStream(savePath));
+		return newFileName;
 	}
 
 	public ImageFile get(String imageId) {

@@ -1,11 +1,17 @@
 package x.y.z;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class ImageFile {
 	public static final String UPLOAD_PATH = "/Users/kangdonhee/tmpDir/";
 	String id;
 	private String contentType;
 	private int contentLength;
 	private String fileName;
+	private boolean isImageFile;
 	
 	public ImageFile (String id, String contentType, int contentLength, String fileName) {
 		this.id = id;
@@ -45,6 +51,19 @@ public class ImageFile {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
+
+	public boolean getIsImageFile() {
+		Object obj = null;
+			try {
+				obj = ImageIO.read(new File(UPLOAD_PATH + this.fileName));
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		return obj != null;
+	}
+
+	public void setIsImageFile(boolean isImageFile) {
+		this.isImageFile = isImageFile;
+	}
 }

@@ -25,12 +25,12 @@
 			<li>MIME 타입 : ${imageFile.contentType }</li>
 		</ul>
 		
-	<c:if test="${imageFile.contentType == 'jpg'}">
+	<c:if test="${imageFile.isImageFile}">
 		<img src="${pageContext.request.contextPath}/image/${imageFile.id}">
 	</c:if>
 		<p />
 
-		<a href="/files/${imageFile.id}">다운로드 링크</a>
+		<a href="/files/${imageFile.fileName}">다운로드 링크</a>
 		</c:when>
 		<c:otherwise>
 		<span class="failed">파일 업로드 실패</span>		
